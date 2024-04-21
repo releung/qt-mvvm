@@ -189,7 +189,8 @@ TEST_F(Data2DPlotControllerTest, dataRange)
     Data2DPlotController controller(color_map);
     controller.setItem(data_item);
 
-    QSignalSpy spy(color_map, &QCPColorMap::dataRangeChanged);
+    //QSignalSpy spy(color_map, &QCPColorMap::dataRangeChanged);
+    QSignalSpy spy(color_map, SIGNAL(dataRangeChanged(const QCPRange&)));
 
     auto range = color_map->dataRange();
     EXPECT_EQ(spy.count(), 0);

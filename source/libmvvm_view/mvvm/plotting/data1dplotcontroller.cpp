@@ -11,6 +11,7 @@
 #include "mvvm/standarditems/data1ditem.h"
 #include <qcustomplot.h>
 #include <stdexcept>
+#include <cassert>
 
 namespace {
 template <typename T> QVector<T> fromStdVector(const std::vector<T>& vec)

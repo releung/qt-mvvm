@@ -209,8 +209,13 @@ TEST_F(ViewModelBaseTest, onRowsAppended)
     // two items to append as a single row with two columns
     auto [children, expected] = test_data(/*ncolumns*/ 2);
 
+#if 0
     QSignalSpy spyInsert(&viewmodel, &ViewModelBase::rowsInserted);
     QSignalSpy spyRemove(&viewmodel, &ViewModelBase::rowsRemoved);
+#else
+    QSignalSpy spyInsert(&viewmodel, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+    QSignalSpy spyRemove(&viewmodel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+#endif
 
     // appending one row
     viewmodel.appendRow(viewmodel.rootItem(), std::move(children));
@@ -242,8 +247,13 @@ TEST_F(ViewModelBaseTest, rowsRemoved)
     auto [children_row1, expected_row1] = test_data(/*ncolumns*/ 2);
     auto [children_row2, expected_row2] = test_data(/*ncolumns*/ 2);
 
+#if 0
     QSignalSpy spyInsert(&viewmodel, &ViewModelBase::rowsInserted);
     QSignalSpy spyRemove(&viewmodel, &ViewModelBase::rowsRemoved);
+#else
+    QSignalSpy spyInsert(&viewmodel, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+    QSignalSpy spyRemove(&viewmodel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+#endif
 
     // appending one row
     viewmodel.appendRow(viewmodel.rootItem(), std::move(children_row0));
@@ -293,7 +303,8 @@ TEST_F(ViewModelBaseTest, setData)
     ViewModelBase viewmodel;
     viewmodel.appendRow(viewmodel.rootItem(), std::move(children));
 
-    QSignalSpy spyData(&viewmodel, &ViewModelBase::dataChanged);
+    //QSignalSpy spyData(&viewmodel, &ViewModelBase::dataChanged);
+    QSignalSpy spyData(&viewmodel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
 
     // changing the data
     QModelIndex children_index = viewmodel.index(0, 0, QModelIndex());
@@ -344,8 +355,13 @@ TEST_F(ViewModelBaseTest, clearRowsFromRoot)
     auto [children_row0, expected_row0] = test_data(/*ncolumns*/ 2);
     auto [children_row1, expected_row1] = test_data(/*ncolumns*/ 2);
 
+#if 0
     QSignalSpy spyInsert(&viewmodel, &ViewModelBase::rowsInserted);
     QSignalSpy spyRemove(&viewmodel, &ViewModelBase::rowsRemoved);
+#else
+    QSignalSpy spyInsert(&viewmodel, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+    QSignalSpy spyRemove(&viewmodel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+#endif
 
     // appending one row
     viewmodel.appendRow(viewmodel.rootItem(), std::move(children_row0));

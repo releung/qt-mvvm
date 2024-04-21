@@ -192,7 +192,9 @@ TEST_F(DefaultViewModelTest, propertyItemDataChanged)
 
     QModelIndex dataIndex = viewModel.index(0, 1);
 
-    QSignalSpy spyDataChanged(&viewModel, &DefaultViewModel::dataChanged);
+    //QSignalSpy spyDataChanged(&viewModel, &DefaultViewModel::dataChanged);
+    QSignalSpy spyDataChanged(&viewModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
+
 
     propertyItem->setData(50.0);
     EXPECT_EQ(spyDataChanged.count(), 1);
@@ -213,7 +215,8 @@ TEST_F(DefaultViewModelTest, insertSingleTopItem)
     SessionModel model;
     DefaultViewModel viewModel(&model);
 
-    QSignalSpy spyInsert(&viewModel, &DefaultViewModel::rowsInserted);
+    //QSignalSpy spyInsert(&viewModel, &DefaultViewModel::rowsInserted);
+    QSignalSpy spyInsert(&viewModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
 
     // inserting single item
     model.insertItem<SessionItem>();
@@ -251,7 +254,8 @@ TEST_F(DefaultViewModelTest, removeSingleTopItem)
     EXPECT_EQ(viewModel.rowCount(), 1);
     EXPECT_EQ(viewModel.columnCount(), 2);
 
-    QSignalSpy spyRemove(&viewModel, &DefaultViewModel::rowsRemoved);
+    //QSignalSpy spyRemove(&viewModel, &DefaultViewModel::rowsRemoved);
+    QSignalSpy spyRemove(&viewModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
 
     // removing child
     model.removeItem(model.rootItem(), {"", 0});
@@ -283,8 +287,10 @@ TEST_F(DefaultViewModelTest, removeOneOfTopItems)
     EXPECT_EQ(viewModel.rowCount(), 2);
     EXPECT_EQ(viewModel.columnCount(), 2);
 
-    QSignalSpy spyRemove(&viewModel, &DefaultViewModel::rowsRemoved);
-    QSignalSpy spyInsert(&viewModel, &DefaultViewModel::rowsInserted);
+    //QSignalSpy spyRemove(&viewModel, &DefaultViewModel::rowsRemoved);
+    QSignalSpy spyRemove(&viewModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+    //QSignalSpy spyInsert(&viewModel, &DefaultViewModel::rowsInserted);
+    QSignalSpy spyInsert(&viewModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
 
     // removing child
     model.removeItem(model.rootItem(), {"", 0});
@@ -358,7 +364,9 @@ TEST_F(DefaultViewModelTest, propertyItemAppearanceChanged)
     DefaultViewModel viewModel(&model);
     auto labelView = viewModel.itemFromIndex(viewModel.index(0, 0));
     auto dataView = viewModel.itemFromIndex(viewModel.index(0, 1));
-    QSignalSpy spyDataChanged(&viewModel, &DefaultViewModel::dataChanged);
+    //QSignalSpy spyDataChanged(&viewModel, &DefaultViewModel::dataChanged);
+    QSignalSpy spyDataChanged(&viewModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
+
 
     // Changing item appearance
     item->setEnabled(false);
@@ -416,7 +424,9 @@ TEST_F(DefaultViewModelTest, tooltipChanged)
     EXPECT_EQ(viewModel.data(viewModel.index(0, 0), Qt::ToolTipRole).toString(), QString("abc"));
     EXPECT_EQ(viewModel.data(viewModel.index(0, 1), Qt::ToolTipRole).toString(), QString("abc"));
 
-    QSignalSpy spyDataChanged(&viewModel, &DefaultViewModel::dataChanged);
+    //QSignalSpy spyDataChanged(&viewModel, &DefaultViewModel::dataChanged);
+    QSignalSpy spyDataChanged(&viewModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
+
 
     // Changing tooltip
     item->setToolTip("abc2");
@@ -453,8 +463,10 @@ TEST_F(DefaultViewModelTest, setPropertyItemAsRoot)
     SessionModel model;
     DefaultViewModel viewModel(&model);
 
-    QSignalSpy spyAboutReset(&viewModel, &DefaultViewModel::modelAboutToBeReset);
-    QSignalSpy spyReset(&viewModel, &DefaultViewModel::modelReset);
+    //QSignalSpy spyAboutReset(&viewModel, &DefaultViewModel::modelAboutToBeReset);
+    QSignalSpy spyAboutReset(&viewModel, SIGNAL(modelAboutToBeReset()));
+    //QSignalSpy spyReset(&viewModel, &DefaultViewModel::modelReset);
+    QSignalSpy spyReset(&viewModel, SIGNAL(modelReset()));
 
     auto item = model.insertItem<PropertyItem>();
     viewModel.setRootSessionItem(item);
@@ -486,8 +498,10 @@ TEST_F(DefaultViewModelTest, setPropertyItemAsRootAfter)
     EXPECT_EQ(viewModel.rowCount(), 1);
     EXPECT_EQ(viewModel.columnCount(), 2);
 
-    QSignalSpy spyAboutReset(&viewModel, &DefaultViewModel::modelAboutToBeReset);
-    QSignalSpy spyReset(&viewModel, &DefaultViewModel::modelReset);
+    //QSignalSpy spyAboutReset(&viewModel, &DefaultViewModel::modelAboutToBeReset);
+    QSignalSpy spyAboutReset(&viewModel, SIGNAL(modelAboutToBeReset()));
+    //QSignalSpy spyReset(&viewModel, &DefaultViewModel::modelReset);
+    QSignalSpy spyReset(&viewModel, SIGNAL(modelReset()));
     viewModel.setRootSessionItem(item);
 
     // new root item doesn't have children
@@ -553,8 +567,10 @@ TEST_F(DefaultViewModelTest, onModelReset)
 
     DefaultViewModel viewModel(model.get());
 
-    QSignalSpy spyAboutReset(&viewModel, &DefaultViewModel::modelAboutToBeReset);
-    QSignalSpy spyReset(&viewModel, &DefaultViewModel::modelReset);
+    //QSignalSpy spyAboutReset(&viewModel, &DefaultViewModel::modelAboutToBeReset);
+    QSignalSpy spyAboutReset(&viewModel, SIGNAL(modelAboutToBeReset()));
+    //QSignalSpy spyReset(&viewModel, &DefaultViewModel::modelReset);
+    QSignalSpy spyReset(&viewModel, SIGNAL(modelReset()));
 
     model->clear();
     EXPECT_EQ(viewModel.rowCount(), 0);
@@ -659,10 +675,14 @@ TEST_F(DefaultViewModelTest, jsonConverterLoadModel)
     EXPECT_EQ(viewmodel.rowCount(), 0);
     EXPECT_EQ(viewmodel.columnCount(), 0);
 
-    QSignalSpy spyInsert(&viewmodel, &DefaultViewModel::rowsInserted);
-    QSignalSpy spyRemove(&viewmodel, &DefaultViewModel::rowsRemoved);
-    QSignalSpy spyAboutReset(&viewmodel, &DefaultViewModel::modelAboutToBeReset);
-    QSignalSpy spyReset(&viewmodel, &DefaultViewModel::modelReset);
+    //QSignalSpy spyInsert(&viewmodel, &DefaultViewModel::rowsInserted);
+    QSignalSpy spyInsert(&viewmodel, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+    //QSignalSpy spyRemove(&viewmodel, &DefaultViewModel::rowsRemoved);
+    QSignalSpy spyRemove(&viewmodel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+    //QSignalSpy spyAboutReset(&viewmodel, &DefaultViewModel::modelAboutToBeReset);
+    QSignalSpy spyAboutReset(&viewmodel, SIGNAL(modelAboutToBeReset()));
+    //QSignalSpy spyReset(&viewmodel, &DefaultViewModel::modelReset);
+    QSignalSpy spyReset(&viewmodel, SIGNAL(modelReset()));
 
     converter.from_json(object, model);
 
@@ -697,10 +717,14 @@ TEST_F(DefaultViewModelTest, jsonDocumentLoadEmptyModel)
 
     JsonDocument document({&model});
 
-    QSignalSpy spyInsert(&viewmodel, &DefaultViewModel::rowsInserted);
-    QSignalSpy spyRemove(&viewmodel, &DefaultViewModel::rowsRemoved);
-    QSignalSpy spyAboutReset(&viewmodel, &DefaultViewModel::modelAboutToBeReset);
-    QSignalSpy spyReset(&viewmodel, &DefaultViewModel::modelReset);
+    //QSignalSpy spyInsert(&viewmodel, &DefaultViewModel::rowsInserted);
+    QSignalSpy spyInsert(&viewmodel, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+    //QSignalSpy spyRemove(&viewmodel, &DefaultViewModel::rowsRemoved);
+    QSignalSpy spyRemove(&viewmodel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+    //QSignalSpy spyAboutReset(&viewmodel, &DefaultViewModel::modelAboutToBeReset);
+    QSignalSpy spyAboutReset(&viewmodel, SIGNAL(modelAboutToBeReset()));
+    //QSignalSpy spyReset(&viewmodel, &DefaultViewModel::modelReset);
+    QSignalSpy spyReset(&viewmodel, SIGNAL(modelReset()));
 
     document.load(fileName);
 
@@ -736,10 +760,14 @@ TEST_F(DefaultViewModelTest, jsonDocumentLoadModel)
 
     JsonDocument document({&model});
 
-    QSignalSpy spyInsert(&viewmodel, &DefaultViewModel::rowsInserted);
-    QSignalSpy spyRemove(&viewmodel, &DefaultViewModel::rowsRemoved);
-    QSignalSpy spyAboutReset(&viewmodel, &DefaultViewModel::modelAboutToBeReset);
-    QSignalSpy spyReset(&viewmodel, &DefaultViewModel::modelReset);
+    //QSignalSpy spyInsert(&viewmodel, &DefaultViewModel::rowsInserted);
+    QSignalSpy spyInsert(&viewmodel, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+    //QSignalSpy spyRemove(&viewmodel, &DefaultViewModel::rowsRemoved);
+    QSignalSpy spyRemove(&viewmodel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+    //QSignalSpy spyAboutReset(&viewmodel, &DefaultViewModel::modelAboutToBeReset);
+    QSignalSpy spyAboutReset(&viewmodel, SIGNAL(modelAboutToBeReset()));
+    //QSignalSpy spyReset(&viewmodel, &DefaultViewModel::modelReset);
+    QSignalSpy spyReset(&viewmodel, SIGNAL(modelReset()));
 
     document.load(fileName);
 
@@ -774,10 +802,14 @@ TEST_F(DefaultViewModelTest, vectorItemInJsonDocument)
     // cleaning original model
     model.clear();
 
-    QSignalSpy spyInsert(&viewmodel, &DefaultViewModel::rowsInserted);
-    QSignalSpy spyRemove(&viewmodel, &DefaultViewModel::rowsRemoved);
-    QSignalSpy spyAboutReset(&viewmodel, &DefaultViewModel::modelAboutToBeReset);
-    QSignalSpy spyReset(&viewmodel, &DefaultViewModel::modelReset);
+    //QSignalSpy spyInsert(&viewmodel, &DefaultViewModel::rowsInserted);
+    QSignalSpy spyInsert(&viewmodel, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+    //QSignalSpy spyRemove(&viewmodel, &DefaultViewModel::rowsRemoved);
+    QSignalSpy spyRemove(&viewmodel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+    //QSignalSpy spyAboutReset(&viewmodel, &DefaultViewModel::modelAboutToBeReset);
+    QSignalSpy spyAboutReset(&viewmodel, SIGNAL(modelAboutToBeReset()));
+    //QSignalSpy spyReset(&viewmodel, &DefaultViewModel::modelReset);
+    QSignalSpy spyReset(&viewmodel, SIGNAL(modelReset()));
 
     document.load(fileName);
 
@@ -815,10 +847,14 @@ TEST_F(DefaultViewModelTest, vectorItemAsRootInJsonDocument)
 
     //    model.clear(); // if we uncomment this, information about rootSessionItem will be lost
 
-    QSignalSpy spyInsert(&viewmodel, &DefaultViewModel::rowsInserted);
-    QSignalSpy spyRemove(&viewmodel, &DefaultViewModel::rowsRemoved);
-    QSignalSpy spyAboutReset(&viewmodel, &DefaultViewModel::modelAboutToBeReset);
-    QSignalSpy spyReset(&viewmodel, &DefaultViewModel::modelReset);
+    //QSignalSpy spyInsert(&viewmodel, &DefaultViewModel::rowsInserted);
+    QSignalSpy spyInsert(&viewmodel, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+    //QSignalSpy spyRemove(&viewmodel, &DefaultViewModel::rowsRemoved);
+    QSignalSpy spyRemove(&viewmodel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+    //QSignalSpy spyAboutReset(&viewmodel, &DefaultViewModel::modelAboutToBeReset);
+    QSignalSpy spyAboutReset(&viewmodel, SIGNAL(modelAboutToBeReset()));
+    //QSignalSpy spyReset(&viewmodel, &DefaultViewModel::modelReset);
+    QSignalSpy spyReset(&viewmodel, SIGNAL(modelReset()));
 
     document.load(fileName);
 

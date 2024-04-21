@@ -129,8 +129,11 @@ TEST_F(ViewModelControllerTest, initThenInsertProperty)
     SessionModel session_model;
 
     ViewModelBase view_model;
-    QSignalSpy spyInsert(&view_model, &ViewModelBase::rowsInserted);
-    QSignalSpy spyRemove(&view_model, &ViewModelBase::rowsRemoved);
+    //QSignalSpy spyInsert(&view_model, &ViewModelBase::rowsInserted);
+    QSignalSpy spyInsert(&view_model, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+
+    //QSignalSpy spyRemove(&view_model, &ViewModelBase::rowsRemoved);
+    QSignalSpy spyRemove(&view_model,  SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
 
     auto controller = create_controller(&session_model, &view_model);
     auto propertyItem = session_model.insertItem<PropertyItem>();
@@ -170,8 +173,12 @@ TEST_F(ViewModelControllerTest, initThenInsertProperties)
     SessionModel session_model;
 
     ViewModelBase view_model;
-    QSignalSpy spyInsert(&view_model, &ViewModelBase::rowsInserted);
-    QSignalSpy spyRemove(&view_model, &ViewModelBase::rowsRemoved);
+    //QSignalSpy spyInsert(&view_model, &ViewModelBase::rowsInserted);
+    QSignalSpy spyInsert(&view_model, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+
+    //QSignalSpy spyRemove(&view_model, &ViewModelBase::rowsRemoved);
+    QSignalSpy spyRemove(&view_model,  SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+
 
     auto controller = create_controller(&session_model, &view_model);
     auto item0 = session_model.insertItem<PropertyItem>();
@@ -197,8 +204,12 @@ TEST_F(ViewModelControllerTest, insertInBetween)
     SessionModel session_model;
 
     ViewModelBase view_model;
-    QSignalSpy spyInsert(&view_model, &ViewModelBase::rowsInserted);
-    QSignalSpy spyRemove(&view_model, &ViewModelBase::rowsRemoved);
+    //QSignalSpy spyInsert(&view_model, &ViewModelBase::rowsInserted);
+    QSignalSpy spyInsert(&view_model, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+
+    //QSignalSpy spyRemove(&view_model, &ViewModelBase::rowsRemoved);
+    QSignalSpy spyRemove(&view_model,  SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+
 
     auto controller = create_controller(&session_model, &view_model);
     auto item0 = session_model.insertItem<PropertyItem>();
@@ -223,8 +234,12 @@ TEST_F(ViewModelControllerTest, initThenInsertVector)
     SessionModel session_model;
 
     ViewModelBase view_model;
-    QSignalSpy spyInsert(&view_model, &ViewModelBase::rowsInserted);
-    QSignalSpy spyRemove(&view_model, &ViewModelBase::rowsRemoved);
+    //QSignalSpy spyInsert(&view_model, &ViewModelBase::rowsInserted);
+    QSignalSpy spyInsert(&view_model, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+
+    //QSignalSpy spyRemove(&view_model, &ViewModelBase::rowsRemoved);
+    QSignalSpy spyRemove(&view_model,  SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+
 
     auto controller = create_controller(&session_model, &view_model);
     session_model.insertItem<VectorItem>();
@@ -245,8 +260,12 @@ TEST_F(ViewModelControllerTest, insertChildToParent)
     SessionModel session_model;
 
     ViewModelBase view_model;
-    QSignalSpy spyInsert(&view_model, &ViewModelBase::rowsInserted);
-    QSignalSpy spyRemove(&view_model, &ViewModelBase::rowsRemoved);
+    //QSignalSpy spyInsert(&view_model, &ViewModelBase::rowsInserted);
+    QSignalSpy spyInsert(&view_model, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+
+    //QSignalSpy spyRemove(&view_model, &ViewModelBase::rowsRemoved);
+    QSignalSpy spyRemove(&view_model,  SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+
 
     auto controller = create_controller(&session_model, &view_model);
 
@@ -281,8 +300,12 @@ TEST_F(ViewModelControllerTest, removeSingleTopItem)
     EXPECT_EQ(view_model.rowCount(), 1);
     EXPECT_EQ(view_model.columnCount(), 2);
 
-    QSignalSpy spyInsert(&view_model, &ViewModelBase::rowsInserted);
-    QSignalSpy spyRemove(&view_model, &ViewModelBase::rowsRemoved);
+    //QSignalSpy spyInsert(&view_model, &ViewModelBase::rowsInserted);
+    QSignalSpy spyInsert(&view_model, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+
+    //QSignalSpy spyRemove(&view_model, &ViewModelBase::rowsRemoved);
+    QSignalSpy spyRemove(&view_model,  SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+
 
     // removing child
     session_model.removeItem(session_model.rootItem(), {"", 0});
@@ -315,8 +338,12 @@ TEST_F(ViewModelControllerTest, removeOneOfTopItems)
     EXPECT_EQ(view_model.rowCount(), 2);
     EXPECT_EQ(view_model.columnCount(), 2);
 
-    QSignalSpy spyRemove(&view_model, &ViewModelBase::rowsRemoved);
-    QSignalSpy spyInsert(&view_model, &ViewModelBase::rowsInserted);
+    //QSignalSpy spyRemove(&view_model, &ViewModelBase::rowsRemoved);
+    QSignalSpy spyRemove(&view_model,  SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+
+    //QSignalSpy spyInsert(&view_model, &ViewModelBase::rowsInserted);
+    QSignalSpy spyInsert(&view_model, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+
 
     // removing child
     session_model.removeItem(session_model.rootItem(), {"", 0});
@@ -395,9 +422,15 @@ TEST_F(ViewModelControllerTest, onModelReset)
     auto controller = create_controller(&session_model, &view_model);
     EXPECT_EQ(controller->rootSessionItem(), session_model.rootItem());
 
-    QSignalSpy spyReset(&view_model, &ViewModelBase::modelReset);
-    QSignalSpy spyRemove(&view_model, &ViewModelBase::rowsRemoved);
-    QSignalSpy spyInsert(&view_model, &ViewModelBase::rowsInserted);
+    //QSignalSpy spyReset(&view_model, &ViewModelBase::modelReset);
+    QSignalSpy spyReset(&view_model, SIGNAL(modelReset()));
+
+    //QSignalSpy spyRemove(&view_model, &ViewModelBase::rowsRemoved);
+    QSignalSpy spyRemove(&view_model,  SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+
+    //QSignalSpy spyInsert(&view_model, &ViewModelBase::rowsInserted);
+    QSignalSpy spyInsert(&view_model, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+
 
     session_model.clear();
 
@@ -419,13 +452,17 @@ TEST_F(ViewModelControllerTest, onEmptyModelResetAndContinue)
     ViewModelBase view_model;
     auto controller = create_controller(&session_model, &view_model);
 
-    QSignalSpy spyReset(&view_model, &ViewModelBase::modelReset);
+    //QSignalSpy spyReset(&view_model, &ViewModelBase::modelReset);
+    QSignalSpy spyReset(&view_model, SIGNAL(modelReset()));
+
     session_model.clear();
 
     EXPECT_EQ(spyReset.count(), 1);
 
     // inserting new item
-    QSignalSpy spyInsert(&view_model, &ViewModelBase::rowsInserted);
+    //QSignalSpy spyInsert(&view_model, &ViewModelBase::rowsInserted);
+    QSignalSpy spyInsert(&view_model, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+
     session_model.insertItem<SessionItem>();
 
     EXPECT_EQ(spyInsert.count(), 1);

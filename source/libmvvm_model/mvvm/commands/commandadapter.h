@@ -13,6 +13,7 @@
 #include "mvvm/model_export.h"
 #include <QUndoCommand>
 #include <memory>
+#include "abstractitemcommand.h"
 
 namespace ModelView {
 

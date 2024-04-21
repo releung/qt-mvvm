@@ -24,7 +24,8 @@ namespace {
 QSize FindSizeOfLetterM()
 {
     QFontMetrics fontMetric(QApplication::font());
-    auto em = fontMetric.horizontalAdvance('M');
+    //auto em = fontMetric.horizontalAdvance('M');
+    auto em = fontMetric.width('M');
     auto fontAscent = fontMetric.ascent();
     return QSize(em, fontAscent);
 }

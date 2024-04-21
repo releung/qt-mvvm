@@ -136,12 +136,23 @@ TEST_F(PropertyTableViewModelTest, standardItemModel)
     QStandardItemModel model;
     QStandardItem* parentItem = model.invisibleRootItem();
 
-    QSignalSpy spyAboutInserInsert(&model, &ViewModelBase::rowsAboutToBeInserted);
-    QSignalSpy spyInsert(&model, &ViewModelBase::rowsInserted);
-    QSignalSpy spyAboutRemove(&model, &ViewModelBase::rowsAboutToBeRemoved);
-    QSignalSpy spyRemove(&model, &ViewModelBase::rowsRemoved);
-    QSignalSpy spyAboutReset(&model, &ViewModelBase::modelAboutToBeReset);
-    QSignalSpy spyReset(&model, &ViewModelBase::modelReset);
+    //QSignalSpy spyAboutInserInsert(&model, &ViewModelBase::rowsAboutToBeInserted);
+    QSignalSpy spyAboutInsert(&model, SIGNAL(rowsAboutToBeInserted(const QModelIndex&, int, int)));
+
+    //QSignalSpy spyInsert(&model, &ViewModelBase::rowsInserted);
+    QSignalSpy spyInsert(&model, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+
+    //QSignalSpy spyAboutRemove(&model, &ViewModelBase::rowsAboutToBeRemoved);
+    QSignalSpy spyAboutRemove(&model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)));
+
+    //QSignalSpy spyRemove(&model, &ViewModelBase::rowsRemoved);
+    QSignalSpy spyRemove(&model, SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+
+    //QSignalSpy spyAboutReset(&model, &ViewModelBase::modelAboutToBeReset);
+    QSignalSpy spyAboutReset(&model, SIGNAL(modelAboutToBeReset()));
+
+    //QSignalSpy spyReset(&model, &ViewModelBase::modelReset);
+    QSignalSpy spyReset(&model, SIGNAL(modelReset()));
 
     QList<QStandardItem*> items = {new QStandardItem("a"), new QStandardItem("b")};
     parentItem->insertRow(0, items);
@@ -149,7 +160,9 @@ TEST_F(PropertyTableViewModelTest, standardItemModel)
     EXPECT_EQ(model.rowCount(), 1);
     EXPECT_EQ(model.columnCount(), 2);
 
-    EXPECT_EQ(spyAboutInserInsert.count(), 1);
+    //EXPECT_EQ(spyAboutInserInsert.count(), 1);
+    EXPECT_EQ(spyAboutInsert.count(), 1);
+
     EXPECT_EQ(spyInsert.count(), 1);
     EXPECT_EQ(spyAboutRemove.count(), 0);
     EXPECT_EQ(spyRemove.count(), 0);
@@ -174,6 +187,7 @@ TEST_F(PropertyTableViewModelTest, insertItemSignaling)
     EXPECT_EQ(viewModel.rowCount(), 0);
     EXPECT_EQ(viewModel.columnCount(), 0);
 
+#if 0
     QSignalSpy spyAboutInserInsert(&viewModel, &ViewModelBase::rowsAboutToBeInserted);
     QSignalSpy spyInsert(&viewModel, &ViewModelBase::rowsInserted);
     QSignalSpy spyAboutRemove(&viewModel, &ViewModelBase::rowsAboutToBeRemoved);
@@ -181,13 +195,23 @@ TEST_F(PropertyTableViewModelTest, insertItemSignaling)
     QSignalSpy spyAboutReset(&viewModel, &ViewModelBase::modelAboutToBeReset);
     QSignalSpy spyReset(&viewModel, &ViewModelBase::modelReset);
     QSignalSpy spyLayout(&viewModel, &ViewModelBase::layoutChanged);
-
+#else
+    QSignalSpy spyAboutInsert(&viewModel, SIGNAL(rowsAboutToBeInserted(const QModelIndex&, int, int)));
+    QSignalSpy spyInsert(&viewModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+    QSignalSpy spyAboutRemove(&viewModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)));
+    QSignalSpy spyRemove(&viewModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+    QSignalSpy spyAboutReset(&viewModel, SIGNAL(modelAboutToBeReset()));
+    QSignalSpy spyReset(&viewModel, SIGNAL(modelReset()));
+    QSignalSpy spyLayout(&viewModel, SIGNAL(layoutChanged(const QList<QPersistentModelIndex>&, QAbstractItemModel::LayoutChangeHint)));
+#endif
     // inserting item
     model.insertItem<VectorItem>();
     EXPECT_EQ(viewModel.rowCount(), 1);
     EXPECT_EQ(viewModel.columnCount(), 3);
 
-    EXPECT_EQ(spyAboutInserInsert.count(), 1);
+    //EXPECT_EQ(spyAboutInserInsert.count(), 1);
+    EXPECT_EQ(spyAboutInsert.count(), 1);
+
     EXPECT_EQ(spyInsert.count(), 1);
     EXPECT_EQ(spyAboutRemove.count(), 0);
     EXPECT_EQ(spyRemove.count(), 0);
@@ -204,7 +228,9 @@ TEST_F(PropertyTableViewModelTest, insertItemSignaling)
     EXPECT_EQ(arguments.at(1).value<int>(), 0);
     EXPECT_EQ(arguments.at(2).value<int>(), 0);
 
-    arguments = spyAboutInserInsert.takeFirst();
+    //arguments = spyAboutInserInsert.takeFirst();
+    arguments = spyAboutInsert.takeFirst();
+
     ASSERT_EQ(arguments.size(), 3); // QModelIndex &parent, int first, int last
     EXPECT_EQ(arguments.at(0).value<QModelIndex>(), QModelIndex());
     EXPECT_EQ(arguments.at(1).value<int>(), 0);
@@ -217,7 +243,9 @@ TEST_F(PropertyTableViewModelTest, insertItemSignaling)
     EXPECT_EQ(viewModel.rowCount(), 2);
     EXPECT_EQ(viewModel.columnCount(), 3);
 
-    EXPECT_EQ(spyAboutInserInsert.count(), 1);
+    //EXPECT_EQ(spyAboutInserInsert.count(), 1);
+    EXPECT_EQ(spyAboutInsert.count(), 1);
+
     EXPECT_EQ(spyInsert.count(), 1);
     EXPECT_EQ(spyAboutRemove.count(), 0);
     EXPECT_EQ(spyRemove.count(), 0);

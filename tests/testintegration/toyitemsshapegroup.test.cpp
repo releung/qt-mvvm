@@ -155,9 +155,16 @@ TEST_F(ToyItemsShapeGroupTest, inDefaultViewModelContext)
     EXPECT_EQ(viewModel.rowCount(groupIndex), 3); // Cylinder, Sphere, Anysopyramid
 
     // setting up signal spy
+#if 0
     QSignalSpy spyRemove(&viewModel, &DefaultViewModel::rowsRemoved);
     QSignalSpy spyInsert(&viewModel, &DefaultViewModel::rowsInserted);
     QSignalSpy spyData(&viewModel, &DefaultViewModel::dataChanged);
+#else
+    QSignalSpy spyRemove(&viewModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+    QSignalSpy spyInsert(&viewModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+    QSignalSpy spyData(&viewModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
+#endif
+
 
     // changing the data
     auto combo = model.data(groupItem, ItemDataRole::DATA).value<ComboProperty>();
@@ -229,9 +236,15 @@ TEST_F(ToyItemsShapeGroupTest, inPropertyViewModelContext)
     }
 
     // setting up signal spy
+#if 0
     QSignalSpy spyRemove(&viewModel, &DefaultViewModel::rowsRemoved);
     QSignalSpy spyInsert(&viewModel, &DefaultViewModel::rowsInserted);
     QSignalSpy spyData(&viewModel, &DefaultViewModel::dataChanged);
+#else
+    QSignalSpy spyRemove(&viewModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+    QSignalSpy spyInsert(&viewModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+    QSignalSpy spyData(&viewModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
+#endif
 
     // changing the data (now GroupItem's current item changed from Sphere to Cylinder
     auto combo = model.data(groupItem, ItemDataRole::DATA).value<ComboProperty>();

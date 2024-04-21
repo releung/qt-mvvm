@@ -38,8 +38,13 @@ TEST_F(TopItemsViewModelTest, insertLayerThenRemove)
     ToyItems::SampleModel model;
     TopItemsViewModel viewmodel(&model);
 
+#if 0
     QSignalSpy spyInsert(&viewmodel, &ViewModelBase::rowsInserted);
     QSignalSpy spyRemove(&viewmodel, &ViewModelBase::rowsRemoved);
+#else
+    QSignalSpy spyInsert(&viewmodel, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+    QSignalSpy spyRemove(&viewmodel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+#endif
 
     model.insertItem<ToyItems::LayerItem>();
 
@@ -96,8 +101,13 @@ TEST_F(TopItemsViewModelTest, insertLayerInMultiLayerThenRemove)
     ToyItems::SampleModel model;
     TopItemsViewModel viewmodel(&model);
 
+#if 0
     QSignalSpy spyInsert(&viewmodel, &ViewModelBase::rowsInserted);
     QSignalSpy spyRemove(&viewmodel, &ViewModelBase::rowsRemoved);
+#else
+    QSignalSpy spyInsert(&viewmodel, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+    QSignalSpy spyRemove(&viewmodel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+#endif
 
     // inserting multilayer
     auto multilayer = model.insertItem<ToyItems::MultiLayerItem>();
@@ -144,9 +154,13 @@ TEST_F(TopItemsViewModelTest, multuLayerAsRooItem)
     // setting up single multilayer playing the role
     auto multilayer = model.insertItem<ToyItems::MultiLayerItem>();
     viewmodel.setRootSessionItem(multilayer);
+#if 0
     QSignalSpy spyInsert(&viewmodel, &ViewModelBase::rowsInserted);
     QSignalSpy spyRemove(&viewmodel, &ViewModelBase::rowsRemoved);
-
+#else
+    QSignalSpy spyInsert(&viewmodel, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
+    QSignalSpy spyRemove(&viewmodel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
+#endif
     // initial conditions
     EXPECT_EQ(viewmodel.rowCount(QModelIndex()), 0);
     EXPECT_EQ(viewmodel.columnCount(QModelIndex()), 0);

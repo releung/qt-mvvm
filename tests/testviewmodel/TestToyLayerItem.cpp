@@ -144,7 +144,8 @@ TEST_F(ToyLayerItemTest, layerItemDataChanged)
     QModelIndex layerIndex = viewModel.index(0, 0);
     QModelIndex thicknessIndex = viewModel.index(0, 1, layerIndex);
 
-    QSignalSpy spyDataChanged(&viewModel, &DefaultViewModel::dataChanged);
+    //QSignalSpy spyDataChanged(&viewModel, &DefaultViewModel::dataChanged);
+    QSignalSpy spyDataChanged(&viewModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
 
     layerItem->setProperty(ToyItems::LayerItem::P_THICKNESS, 50.0);
     EXPECT_EQ(spyDataChanged.count(), 1);

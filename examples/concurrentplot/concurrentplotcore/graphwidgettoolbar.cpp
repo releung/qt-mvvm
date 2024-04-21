@@ -79,7 +79,8 @@ void GraphWidgetToolBar::init_value_elements()
         value_slider->setValue(value);
         this->valueChanged(value);
     };
-    connect(value_box, QOverload<int>::of(&QSpinBox::valueChanged), on_value_changed);
+    //connect(value_box, QOverload<int>::of(&QSpinBox::valueChanged), on_value_changed);
+    connect(value_box, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), on_value_changed);
 
     // Slider setup.
     value_slider->setOrientation(Qt::Horizontal);
@@ -107,8 +108,9 @@ void GraphWidgetToolBar::init_delay_elements()
     delay_spinbox->setMinimumWidth(100);
     addWidget(delay_spinbox);
 
-    connect(delay_spinbox, QOverload<int>::of(&QSpinBox::valueChanged), this,
-            &GraphWidgetToolBar::delayChanged);
+    //connect(delay_spinbox, QOverload<int>::of(&QSpinBox::valueChanged), this, &GraphWidgetToolBar::delayChanged);
+    connect(delay_spinbox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &GraphWidgetToolBar::delayChanged);
+
     delay_spinbox->setValue(1000);
 }
 

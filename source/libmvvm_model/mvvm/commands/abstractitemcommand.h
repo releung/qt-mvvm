@@ -40,9 +40,9 @@ public:
     std::string description() const;
 
     CommandResult result() const;
+    void setObsolete(bool flag);
 
 protected:
-    void setObsolete(bool flag);
     void setDescription(const std::string& text);
     Path pathFromItem(SessionItem* item) const;
     SessionItem* itemFromPath(const Path& path) const;

@@ -25,6 +25,7 @@ using ::testing::_;
 
 class ViewportAxisPlotControllerTest : public ::testing::Test {
 public:
+#if 0
     std::unique_ptr<QSignalSpy> createSpy(QCPAxis* axis)
     {
         return std::make_unique<QSignalSpy>(
@@ -37,6 +38,21 @@ public:
             axis, static_cast<void (QCPAxis::*)(const QCPRange&, const QCPRange&)>(
                       &QCPAxis::rangeChanged));
     }
+#else
+    std::unique_ptr<QSignalSpy> createSpy(QCPAxis* axis)
+    {
+        // 使用 SIGNAL 宏将信号转换为字符串
+        return std::make_unique<QSignalSpy>(
+            axis, SIGNAL(rangeChanged(const QCPRange&)));
+    }
+
+    std::unique_ptr<QSignalSpy> createSpy2(QCPAxis* axis)
+    {
+        // 使用 SIGNAL 宏将重载的信号转换为字符串
+        return std::make_unique<QSignalSpy>(
+            axis, SIGNAL(rangeChanged(const QCPRange&, const QCPRange&)));
+    }
+#endif
 };
 
 //! Initial state.
